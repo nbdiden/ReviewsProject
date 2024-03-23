@@ -15,11 +15,13 @@ brand = st.text_input('Brand', placeholder="Enter Brand Name")
 # Product Input
 product = st.text_input('Product', placeholder="Enter Product Name")
 
-# Average Rating Slider
-average_rating = st.slider('Average Rating', min_value=0.0, max_value=5.0, step=0.1, format="%.1f")
+# Collect additional inputs for review generation
+num_reviews = st.number_input('Number of Reviews to Generate', min_value=1, max_value=10000, value=5)
 
-# Total Ratings Slider
-total_ratings = st.slider('Total Ratings', min_value=0, max_value=1000, step=1)
+rating = st.slider('Rating for Generated Reviews', min_value=1, max_value=5, step=1)
+
+# Path for temporary output file
+output_file_path = 'generated_reviews.json'
 
 # Rating Distribution Inputs
 st.subheader('Rating Distribution')
@@ -58,7 +60,7 @@ bounds = parse_bounds_input(upper_bounds, lower_bounds)
 
 if bounds and st.button('Calculate Distribution'):
     # Call the distribution calculation function
-    distribution = calculate_rating_distribution(average_rating, total_ratings, bounds)
+    distribution = calculate_rating_distribution(rating, num_reviews, bounds)
     # Display the calculated distribution
     for i, count in enumerate(distribution, 1):
         st.write(f"{i} star: {count}")
@@ -77,7 +79,26 @@ if uploaded_file is not None:
     st.json(json_data)
 
 # Start Analysis Button
-if st.button('Start Analysis'):
-    st.write('Analysis started...')  # Placeholder for analysis logic
+if st.button('Generate Reviews'):
+    # Call the function to populate the JSON file with generated reviews
+    populate_json_file(product, brand, "Default Style", rating, num_reviews, output_file_path)
+
+    # Read and display the generated reviews or offer download
+    if os.path.exists(output_file_path):
+        with open(output_file_path, 'r') as file:
+            generated_reviews = json.load(file)
+            st.json(generated_reviews)  # Display the reviews in the app
+        
+        # Alternatively, offer the file for download
+        with open(output_file_path, 'rb') as file:
+            st.download_button(
+                label="Download Generated Reviews",
+                data=file,
+                file_name="generated_reviews.json",
+                mime="application/json"
+            )
+
+        # Clean up: Delete the temporary file after displaying/offering download
+        os.remove(output_file_path)
 
 # Note: You need to implement the backend logic for processing the inputs and conducting the analysis.
