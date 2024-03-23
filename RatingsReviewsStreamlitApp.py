@@ -1,7 +1,7 @@
 import streamlit as st
-from distributionmath import calculate_rating_distribution
-from outputprompting import populate_json_file
-from csvjson import convert_csv_to_json  # Import the convert function
+from RatingDistributionCalculator import calculate_rating_distribution
+from ReviewGenerator import populate_json_file
+from CSVtoJSONConverter import convert_csv_to_json  # Import the convert function
 from anthropic import Anthropic
 import json  # Import json for handling JSON data
 import os
