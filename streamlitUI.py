@@ -18,7 +18,7 @@ product = st.text_input('Product', placeholder="Enter Product Name")
 # Collect additional inputs for review generation
 num_reviews = st.number_input('Number of Reviews to Generate', min_value=1, max_value=10000, value=5)
 
-rating = st.slider('Rating for Generated Reviews', min_value=1, max_value=5, step=1)
+rating = st.slider('Rating for Generated Reviews', min_value=1, max_value=5, step=0.1)
 
 # Path for temporary output file
 output_file_path = 'generated_reviews.json'
