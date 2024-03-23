@@ -1,0 +1,83 @@
+import streamlit as st
+from distributionmath import calculate_rating_distribution
+from outputprompting import populate_json_file
+from csvjson import convert_csv_to_json  # Import the convert function
+import json  # Import json for handling JSON data
+import os
+
+# Title and Description
+st.title('Ratings & Reviews Analysis')
+st.write('Comprehensive insights into ratings and reviews for informed decision-making.')
+
+# Brand Input
+brand = st.text_input('Brand', placeholder="Enter Brand Name")
+
+# Product Input
+product = st.text_input('Product', placeholder="Enter Product Name")
+
+# Average Rating Slider
+average_rating = st.slider('Average Rating', min_value=0.0, max_value=5.0, step=0.1, format="%.1f")
+
+# Total Ratings Slider
+total_ratings = st.slider('Total Ratings', min_value=0, max_value=1000, step=1)
+
+# Rating Distribution Inputs
+st.subheader('Rating Distribution')
+col1, col2, col3, col4, col5 = st.columns(5)
+with col1:
+    dist_1_upper = st.text_input('5 Stars Upper Bound', key='5_upper')
+    dist_1_lower = st.text_input('5 Stars Lower Bound', key='5_lower')
+with col2:
+    dist_2_upper = st.text_input('4 Stars Upper Bound', key='4_upper')
+    dist_2_lower = st.text_input('4 Stars Lower Bound', key='4_lower')
+with col3:
+    dist_3_upper = st.text_input('3 Stars Upper Bound', key='3_upper')
+    dist_3_lower = st.text_input('3 Stars Lower Bound', key='3_lower')
+with col4:
+    dist_4_upper = st.text_input('2 Stars Upper Bound', key='2_upper')
+    dist_4_lower = st.text_input('2 Stars Lower Bound', key='2_lower')
+with col5:
+    dist_5_upper = st.text_input('1 Star Upper Bound', key='1_upper')
+    dist_5_lower = st.text_input('1 Star Lower Bound', key='1_lower')
+
+# Convert bounds input from user into a list of tuples
+def parse_bounds_input(upper_bounds, lower_bounds):
+    bounds = []
+    for ub, lb in zip(upper_bounds, lower_bounds):
+        try:
+            bounds.append((float(lb), float(ub)))
+        except ValueError:  # In case of conversion error
+            st.error("Please enter valid numeric bounds")
+            return None
+    return bounds
+
+# Collect bounds input from the user
+upper_bounds = [dist_5_upper, dist_4_upper, dist_3_upper, dist_2_upper, dist_1_upper]
+lower_bounds = [dist_5_lower, dist_4_lower, dist_3_lower, dist_2_lower, dist_1_lower]
+bounds = parse_bounds_input(upper_bounds, lower_bounds)
+
+if bounds and st.button('Calculate Distribution'):
+    # Call the distribution calculation function
+    distribution = calculate_rating_distribution(average_rating, total_ratings, bounds)
+    # Display the calculated distribution
+    for i, count in enumerate(distribution, 1):
+        st.write(f"{i} star: {count}")
+        
+st.subheader('Settings')
+passkey = st.text_input('Passkey', type='password')
+
+# File Uploader
+uploaded_file = st.file_uploader("Upload Reviews (CSV)", type=['csv'])
+
+# Process uploaded file
+if uploaded_file is not None:
+    # Convert CSV file to JSON
+    json_data = convert_csv_to_json(uploaded_file)
+    # Display JSON data or proceed with further processing
+    st.json(json_data)
+
+# Start Analysis Button
+if st.button('Start Analysis'):
+    st.write('Analysis started...')  # Placeholder for analysis logic
+
+# Note: You need to implement the backend logic for processing the inputs and conducting the analysis.
