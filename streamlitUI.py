@@ -2,6 +2,7 @@ import streamlit as st
 from distributionmath import calculate_rating_distribution
 from outputprompting import populate_json_file
 from csvjson import convert_csv_to_json  # Import the convert function
+from anthropic import Anthropic
 import json  # Import json for handling JSON data
 import os
 
@@ -75,8 +76,9 @@ uploaded_file = st.file_uploader("Upload Reviews (CSV)", type=['csv'])
 if uploaded_file is not None:
     # Convert CSV file to JSON
     json_data = convert_csv_to_json(uploaded_file)
-    # Display JSON data or proceed with further processing
-    st.json(json_data)
+
+    with open('input_reviews.json', 'w') as json_file:
+        json_file.write(json_data)
 
 # Start Analysis Button
 if st.button('Generate Reviews'):
