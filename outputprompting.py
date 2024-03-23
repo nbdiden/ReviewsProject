@@ -5,7 +5,7 @@ import anthropic
 import os
 
 client = anthropic.Anthropic(
-    api_key="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",
+    api_key=os.getenv("ANTHROPIC_API_KEY"),
 )
 
 def load_input_reviews():
