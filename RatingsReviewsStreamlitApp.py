@@ -81,6 +81,9 @@ if uploaded_file is not None:
     with open('input_reviews.json', 'w') as json_file:
         json_file.write(json_data)
 
+    # New Step: Call analyze_and_summarize_reviews
+    analyze_and_summarize_reviews('input_reviews.json', 'updated_input_reviews.json')
+
 # Start Analysis Button
 if st.button('Generate Reviews'):
     # Call the function to populate the JSON file with generated reviews
