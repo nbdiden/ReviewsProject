@@ -2,6 +2,7 @@ import streamlit as st
 from RatingDistributionCalculator import calculate_rating_distribution
 from ReviewGenerator import populate_json_file
 from CSVtoJSONConverter import convert_csv_to_json  # Import the convert function
+from ReviewSentimentSummary import analyze_and_summarize_reviews
 from anthropic import Anthropic
 import json  # Import json for handling JSON data
 import os
