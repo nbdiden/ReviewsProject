@@ -2,9 +2,10 @@ import json
 import anthropic
 import os
 
-def analyze_and_summarize_reviews(input_file, output_file):
+def analyze_and_summarize_reviews(input_file, output_file, anthropic_api_key):
     # Initialize the Anthropic client
-    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    # Replace it with:
+    anthropic_client = anthropic.Anthropic(api_key=anthropic_api_key)
 
     # Load the reviews from the JSON file
     with open('input_reviews.json', 'r') as file:
@@ -13,7 +14,7 @@ def analyze_and_summarize_reviews(input_file, output_file):
     # Iterate over each review
     for review in reviews:
         # Create a message for Claude to analyze the sentiment of the review body
-        sentiment_message = client.messages.create(
+        sentiment_message = anthropic_client.messages.create(
             model="claude-3-opus-20240229",
             max_tokens=100,
             temperature=0.0,
@@ -29,7 +30,7 @@ def analyze_and_summarize_reviews(input_file, output_file):
         review['review_sentiment'] = sentiment
 
         # Create a message for Claude to generate a summary of the review
-        summary_message = client.messages.create(
+        summary_message = anthropic_client.messages.create(
             model="claude-3-opus-20240229",
             max_tokens=100,
             temperature=0.0,

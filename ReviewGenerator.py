@@ -4,15 +4,15 @@ from datetime import datetime, timedelta
 import anthropic
 import os
 
-client = anthropic.Anthropic(
-    api_key=os.getenv("ANTHROPIC_API_KEY"),
-)
 
 def load_input_reviews():
     with open('input_reviews.json', 'r') as f:
         return json.load(f)
 
-def generate_review(product, brand, style, rating, model="claude-3-opus-20240229"):
+def generate_review(product, brand, style, rating, anthropic_api_key, model="claude-3-opus-20240229"):
+
+    anthropic_client = anthropic.Anthropic(api_key=anthropic_api_key)
+
     rating_sentiment = "Negative" if rating < 3 else "Neutral" if rating == 3 else "Positive"
     date = (datetime.now() - timedelta(days=random.randint(1,365))).strftime("Reviewed in the United States on %B %d, %Y")
     author = "Author" + str(random.randint(1,1000))
@@ -23,7 +23,7 @@ def generate_review(product, brand, style, rating, model="claude-3-opus-20240229
     
     # Generate title and body using Claude AI
     title_prompt = f"Generate a review title for a product with a rating of {rating}"
-    title_message = client.messages.create(
+    title_message = anthropic_client.messages.create(
         model=model, 
         system=system_prompt,
         messages=[
@@ -35,7 +35,7 @@ def generate_review(product, brand, style, rating, model="claude-3-opus-20240229
     title = title_message.content.__getitem__(0).text
 
     body_prompt = f"Generate a review body for a product with a rating of {rating}"
-    body_message = client.messages.create(
+    body_message = anthropic_client.messages.create(
         model=model, 
         system=system_prompt,
         messages=[

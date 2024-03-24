@@ -68,7 +68,7 @@ if bounds and st.button('Calculate Distribution'):
         st.write(f"{i} star: {count}")
         
 st.subheader('Settings')
-passkey = st.text_input('Passkey', type='password')
+anthropic_api_key = st.text_input('Anthropic API Key', placeholder="Enter your Anthropics API Key here")
 
 # File Uploader
 uploaded_file = st.file_uploader("Upload Reviews (CSV)", type=['csv'])
@@ -82,7 +82,7 @@ if uploaded_file is not None:
         json_file.write(json_data)
 
     # New Step: Call analyze_and_summarize_reviews
-    analyze_and_summarize_reviews('input_reviews.json', 'updated_input_reviews.json')
+    analyze_and_summarize_reviews('input_reviews.json', 'updated_input_reviews.json', anthropic_api_key)
 
 # Start Analysis Button
 if st.button('Generate Reviews'):
