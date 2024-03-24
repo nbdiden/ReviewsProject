@@ -9,7 +9,7 @@ def load_input_reviews():
     with open('input_reviews.json', 'r') as f:
         return json.load(f)
 
-def generate_review(product, brand, style, rating, anthropic_api_key, model="claude-3-opus-20240229"):
+def generate_review(product, brand, style, anthropic_api_key, rating, model="claude-3-opus-20240229"):
 
     anthropic_client = anthropic.Anthropic(api_key=anthropic_api_key)
 
@@ -65,8 +65,8 @@ def generate_review(product, brand, style, rating, anthropic_api_key, model="cla
         "body": body,
     }
 
-def populate_json_file(product, brand, style, rating, num_reviews, output_file):
-    reviews = [generate_review(product, brand, style, rating) for _ in range(num_reviews)]
+def populate_json_file(product, brand, style, anthropic_api_key, rating, num_reviews, output_file):
+    reviews = [generate_review(product, brand, style, anthropic_api_key, rating) for _ in range(num_reviews)]
     with open(output_file, 'w') as f:
         json.dump(reviews, f, indent=4)
 
