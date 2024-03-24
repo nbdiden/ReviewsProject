@@ -87,7 +87,7 @@ if uploaded_file is not None:
 # Start Analysis Button
 if st.button('Generate Reviews'):
     # Call the function to populate the JSON file with generated reviews
-    populate_json_file(product, brand, "Default Style", rating, num_reviews, output_file_path)
+    populate_json_file(product, brand, "Default Style", anthropic_api_key, rating, num_reviews, output_file_path)
 
     # Read and display the generated reviews or offer download
     if os.path.exists(output_file_path):
