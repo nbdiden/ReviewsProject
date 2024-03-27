@@ -69,13 +69,3 @@ def populate_json_file(product, brand, style, anthropic_api_key, rating, num_rev
     reviews = [generate_review(product, brand, style, anthropic_api_key, rating) for _ in range(num_reviews)]
     with open(output_file, 'w') as f:
         json.dump(reviews, f, indent=4)
-
-# Example usage with a file, for standalone testing
-if __name__ == '__main__':
-    product = "Silver Infused Pillowcases"
-    brand = "Silver Goose"
-    style = "Black"
-    rating = 4
-    num_reviews = 4
-    with open('output_reviews.json', 'w') as output_file:
-        populate_json_file(product, brand, style, rating, num_reviews, output_file)
