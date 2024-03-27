@@ -11,7 +11,11 @@ def load_input_reviews():
 
 def generate_review(product, brand, style, anthropic_api_key, rating, model="claude-3-haiku-20240307"):
 
-    anthropic_client = anthropic.Anthropic(api_key=anthropic_api_key)
+    anthropic_client = anthropic.Anthropic(
+        max_retries=5,
+        timeout=20.0,
+        api_key=anthropic_api_key
+        )
 
     rating_sentiment = "Negative" if rating < 3 else "Neutral" if rating == 3 else "Positive"
     date = (datetime.now() - timedelta(days=random.randint(1,365))).strftime("Reviewed in the United States on %B %d, %Y")

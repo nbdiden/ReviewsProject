@@ -5,7 +5,11 @@ import os
 def analyze_and_summarize_reviews(input_file, output_file, anthropic_api_key):
     # Initialize the Anthropic client
     # Replace it with:
-    anthropic_client = anthropic.Anthropic(api_key=anthropic_api_key)
+    anthropic_client = anthropic.Anthropic(
+        max_retries=5,
+        timeout=20.0,
+        api_key=anthropic_api_key
+        )
 
     # Load the reviews from the JSON file
     with open('input_reviews.json', 'r') as file:
